@@ -1,11 +1,18 @@
 {
   "name": "react-luckysheet",
-  "version": "1.0.0",
-  "main": "index.js",
+  "version": "1.1.0",
+  "main": "lib",
+  "types": "lib/index.d.ts",
+  "engines": {
+    "npm": ">=3.0.0"
+  },
+  "module": "esm",
   "license": "MIT",
   "scripts": {
-    "dev": "rollup -w -c config/rollup.config.js",
-    "build": "rollup -c config/rollup.config.js"
+    "build": "rimraf -rf lib esm dist && npm run build:cjs && npm run build:esm && npm run build:umd",
+    "build:cjs": "tsc --project tsconfig.json",
+    "build:esm": "tsc --project tsconfig.json --module es2015 --outDir esm",
+    "build:umd": "rollup --config config/rollup.config.js"
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",
@@ -27,6 +34,7 @@
     "less-plugin-npm-import": "^2.1.0",
     "magic-string": "^0.25.7",
     "postcss": "^8.3.8",
+    "rimraf": "^3.0.2",
     "rollup": "^2.58.0",
     "rollup-merge-config": "^0.0.3",
     "rollup-plugin-babel": "^4.4.0",
@@ -42,13 +50,8 @@
     "typescript": "^4.4.3"
   },
   "dependencies": {
-    "classnames": "^2.3.1",
-    "jquery": "^3.6.0",
     "luckysheet": "^2.1.13",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
-  },
-  "files": [
-    "/dist"
-  ]
+  }
 }
