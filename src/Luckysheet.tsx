@@ -268,7 +268,7 @@ export const Luckysheet = ({ options, className, style, ...props }: ILuckysheetP
         ...options,
       })
     }
-  }, [options])
+  }, [JSON.stringify(options)])
   return (
     <div
       id="go-luckysheet"
