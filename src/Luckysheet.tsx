@@ -237,13 +237,22 @@ export interface ILuckysheetOptions {
   }
 }
 
-export interface ILuckysheetProps {
+export interface ILuckysheetProps extends ILuckysheetOptions {
   className?: string
   style?: React.CSSProperties
-  options?: ILuckysheetOptions
 }
 
-export const Luckysheet = ({ options, className, style, ...props }: ILuckysheetProps) => {
+const pickDataProps = (props: any = {}) => {
+  return Object.keys(props).reduce((buf, key) => {
+    if (key.includes('data-')) {
+      buf[key] = props[key]
+    }
+    return buf
+  }, {})
+}
+
+
+export const Luckysheet = ({ className, style, ...options }: ILuckysheetProps) => {
   useEffect(() => {
     let luckysheet = window['luckysheet']
     if (!luckysheet) {
@@ -269,12 +278,13 @@ export const Luckysheet = ({ options, className, style, ...props }: ILuckysheetP
       })
     }
   }, [JSON.stringify(options)])
+  const dataProps = pickDataProps(options)
   return (
     <div
       id="go-luckysheet"
       className={className ? `${className} go-luckysheet` : 'go-luckysheet'}
       style={{ height: '100%', position: 'relative', ...style }}
-      {...props}
+      {...dataProps}
     />
   )
 }
