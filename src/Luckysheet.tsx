@@ -255,6 +255,9 @@ const pickDataProps = (props: any = {}) => {
 export const Luckysheet = ({ className, style, ...options }: ILuckysheetProps) => {
   useEffect(() => {
     let luckysheet = window['luckysheet']
+    if(options.data.length === 0) {
+      delete options.data
+    }
     if (!luckysheet) {
       const loaded = Promise.all([
         createLink('https://cdn.jsdelivr.net/npm/luckysheet@latest/dist/plugins/css/pluginsCss.css'),
