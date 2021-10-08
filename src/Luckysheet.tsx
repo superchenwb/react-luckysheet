@@ -271,12 +271,14 @@ export const Luckysheet = ({ className, style, ...options }: ILuckysheetProps) =
         luckysheet = window['luckysheet']
         luckysheet?.create({
           container: 'go-luckysheet',
+          plugins:['chart'],
           ...options,
         })
       })
     } else {
       luckysheet?.create({
         container: 'go-luckysheet',
+        plugins:['chart'],
         ...options,
       })
     }
