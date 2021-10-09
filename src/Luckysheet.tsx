@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useRef, useEffect } from 'react'
 
 function createScript(src: string) {
   return new Promise((resolve, reject) => {
@@ -251,10 +251,11 @@ const pickDataProps = (props: any = {}) => {
   }, {})
 }
 
-export const Luckysheet = ({ className, style, data, ...options }: ILuckysheetProps) => {
+export const Luckysheet = ({ className, style, ...options }: ILuckysheetProps) => {
+  const luckysheet = useRef<any>()
   useEffect(() => {
-    let luckysheet = window['luckysheet']
-    if (!luckysheet) {
+    luckysheet.current = window['luckysheet']
+    if (!luckysheet.current) {
       const loaded = Promise.all([
         createLink('https://cdn.jsdelivr.net/npm/luckysheet@latest/dist/plugins/css/pluginsCss.css'),
         createLink('https://cdn.jsdelivr.net/npm/luckysheet@latest/dist/plugins/plugins.css'),
@@ -264,28 +265,27 @@ export const Luckysheet = ({ className, style, data, ...options }: ILuckysheetPr
         createScript('https://cdn.jsdelivr.net/npm/luckysheet@latest/dist/luckysheet.umd.js'),
       ])
       loaded.then(() => {
-        luckysheet = window['luckysheet']
-        luckysheet?.create({
+        luckysheet.current = window['luckysheet']
+        luckysheet.current?.create({
           container: 'go-luckysheet',
           plugins: ['chart'],
           ...options,
         })
       })
     } else {
-      luckysheet?.create({
+      luckysheet.current?.create({
         container: 'go-luckysheet',
         plugins: ['chart'],
         ...options,
       })
     }
     return () => {
-      luckysheet?.destroy()
+      luckysheet.current?.destroy()
     }
   }, [JSON.stringify(options)])
-  useEffect(() => {
-    let luckysheet = window['luckysheet']
-    luckysheet.updataSheet({ data })
-  }, [data])
+  // useEffect(() => {
+  //   luckysheet.current?.updataSheet({ data })
+  // }, [data])
   const dataProps = pickDataProps(options)
   return (
     <div
