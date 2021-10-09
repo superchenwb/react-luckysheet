@@ -251,13 +251,9 @@ const pickDataProps = (props: any = {}) => {
   }, {})
 }
 
-
-export const Luckysheet = ({ className, style, ...options }: ILuckysheetProps) => {
+export const Luckysheet = ({ className, style, data, ...options }: ILuckysheetProps) => {
   useEffect(() => {
     let luckysheet = window['luckysheet']
-    if(options.data.length === 0) {
-      delete options.data
-    }
     if (!luckysheet) {
       const loaded = Promise.all([
         createLink('https://cdn.jsdelivr.net/npm/luckysheet@latest/dist/plugins/css/pluginsCss.css'),
@@ -271,18 +267,25 @@ export const Luckysheet = ({ className, style, ...options }: ILuckysheetProps) =
         luckysheet = window['luckysheet']
         luckysheet?.create({
           container: 'go-luckysheet',
-          plugins:['chart'],
+          plugins: ['chart'],
           ...options,
         })
       })
     } else {
       luckysheet?.create({
         container: 'go-luckysheet',
-        plugins:['chart'],
+        plugins: ['chart'],
         ...options,
       })
     }
+    return () => {
+      luckysheet?.destroy()
+    }
   }, [JSON.stringify(options)])
+  useEffect(() => {
+    let luckysheet = window['luckysheet']
+    luckysheet.updataSheet({ data })
+  }, [data])
   const dataProps = pickDataProps(options)
   return (
     <div
