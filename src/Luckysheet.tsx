@@ -251,31 +251,37 @@ const pickDataProps = (props: any = {}) => {
   }, {})
 }
 
+const Registry = {
+  cdn: '.',
+}
+
+export const setNpmCDNRegistry = (registry: string) => {
+  Registry.cdn = registry
+}
+
 export const Luckysheet = ({ className, style, ...options }: ILuckysheetProps) => {
   const luckysheet = useRef<any>()
   useEffect(() => {
     luckysheet.current = window['luckysheet']
     if (!luckysheet.current) {
       const loaded = Promise.all([
-        createLink('https://cdn.jsdelivr.net/npm/luckysheet@latest/dist/plugins/css/pluginsCss.css'),
-        createLink('https://cdn.jsdelivr.net/npm/luckysheet@latest/dist/plugins/plugins.css'),
-        createLink('https://cdn.jsdelivr.net/npm/luckysheet@latest/dist/css/luckysheet.css'),
-        createLink('https://cdn.jsdelivr.net/npm/luckysheet@latest/dist/assets/iconfont/iconfont.css'),
-        createScript('https://cdn.jsdelivr.net/npm/luckysheet@latest/dist/plugins/js/plugin.js'),
-        createScript('https://cdn.jsdelivr.net/npm/luckysheet@latest/dist/luckysheet.umd.js'),
+        createLink(Registry.cdn + '/dist/plugins/css/pluginsCss.css'),
+        createLink(Registry.cdn + '/dist/plugins/plugins.css'),
+        createLink(Registry.cdn + '/dist/css/luckysheet.css'),
+        createLink(Registry.cdn + '/assets/iconfont/iconfont.css'),
+        createScript(Registry.cdn + '/dist/plugins/js/plugin.js'),
+        createScript(Registry.cdn + '/dist/luckysheet.umd.js'),
       ])
       loaded.then(() => {
         luckysheet.current = window['luckysheet']
         luckysheet.current?.create({
           container: 'go-luckysheet',
-          plugins: ['chart'],
           ...options,
         })
       })
     } else {
       luckysheet.current?.create({
         container: 'go-luckysheet',
-        plugins: ['chart'],
         ...options,
       })
     }
