@@ -240,6 +240,7 @@ export interface ILuckysheetOptions {
 export interface ILuckysheetProps extends ILuckysheetOptions {
   className?: string
   style?: React.CSSProperties
+  registry?: string
 }
 
 const pickDataProps = (props: any = {}) => {
@@ -252,25 +253,26 @@ const pickDataProps = (props: any = {}) => {
 }
 
 const Registry = {
-  cdn: '.',
+  cdn: './lucksheet',
 }
 
 export const setNpmCDNRegistry = (registry: string) => {
   Registry.cdn = registry
 }
 
-export const Luckysheet = ({ className, style, ...options }: ILuckysheetProps) => {
+export const Luckysheet = ({ className, style, registry, ...options }: ILuckysheetProps) => {
   const luckysheet = useRef<any>()
   useEffect(() => {
     luckysheet.current = window['luckysheet']
     if (!luckysheet.current) {
+      const _registry = registry || Registry.cdn
       const loaded = Promise.all([
-        createLink(Registry.cdn + '/dist/plugins/css/pluginsCss.css'),
-        createLink(Registry.cdn + '/dist/plugins/plugins.css'),
-        createLink(Registry.cdn + '/dist/css/luckysheet.css'),
-        createLink(Registry.cdn + '/assets/iconfont/iconfont.css'),
-        createScript(Registry.cdn + '/dist/plugins/js/plugin.js'),
-        createScript(Registry.cdn + '/dist/luckysheet.umd.js'),
+        createLink(_registry + '/plugins/css/pluginsCss.css'),
+        createLink(_registry + '/plugins/plugins.css'),
+        createLink(_registry + '/css/luckysheet.css'),
+        createLink(_registry + '/assets/iconfont/iconfont.css'),
+        createScript(_registry + '/plugins/js/plugin.js'),
+        createScript(_registry + '/luckysheet.umd.js'),
       ])
       loaded.then(() => {
         luckysheet.current = window['luckysheet']
