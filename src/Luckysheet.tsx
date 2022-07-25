@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react'
+import './styles.css'
 
 function createScript(src: string) {
   return new Promise((resolve, reject) => {
@@ -253,7 +254,7 @@ const pickDataProps = (props: any = {}) => {
 }
 
 const Registry = {
-  cdn: './lucksheet',
+  cdn: './luckysheet',
 }
 
 export const setNpmCDNRegistry = (registry: string) => {
@@ -276,6 +277,7 @@ export const Luckysheet = ({ className, style, registry, ...options }: ILuckyshe
       ])
       loaded.then(() => {
         luckysheet.current = window['luckysheet']
+        luckysheet.current.destroy()
         luckysheet.current?.create({
           container: 'go-luckysheet',
           ...options,
@@ -284,6 +286,15 @@ export const Luckysheet = ({ className, style, registry, ...options }: ILuckyshe
     } else {
       luckysheet.current?.create({
         container: 'go-luckysheet',
+        loading: {
+          image: () => {
+            return `<svg viewBox="25 25 50 50" class="circular">
+            <circle cx="50" cy="50" r="20" fill="none"></circle>
+            </svg>`
+          },
+          imageClass: 'loadingAnimation',
+        },
+        plugins: ['chart', 'print', 'upload', 'download'],
         ...options,
       })
     }

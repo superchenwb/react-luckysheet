@@ -1,0 +1,42 @@
+/* 自定义loading演示样式 */
+@keyframes loading-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes loading-dash {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -40px;
+  }
+
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -120px;
+  }
+}
+
+.loadingAnimation {
+  width: 3em;
+  height: 3em;
+  animation: loading-rotate 2s linear infinite;
+}
+
+.loadingAnimation circle {
+  animation: loading-dash 1.5s ease-in-out infinite;
+  stroke-dasharray: 90, 150;
+  stroke-dashoffset: 0;
+  stroke-width: 2;
+  stroke: currentColor;
+  stroke-linecap: round;
+}
