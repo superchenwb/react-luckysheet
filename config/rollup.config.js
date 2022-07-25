@@ -6,6 +6,7 @@ import NpmImport from 'less-plugin-npm-import'
 import externalGlobals from 'rollup-plugin-external-globals'
 import { terser } from 'rollup-plugin-terser'
 import json from '@rollup/plugin-json'
+import copy from 'rollup-plugin-copy'
 
 const presets = () => {
   const externals = {
@@ -40,6 +41,13 @@ const presets = () => {
     commonjs(),
     externalGlobals(externals),
     json(),
+    copy({
+      targets: [
+        { src: 'src/styles.css', dest: 'dist' },
+        { src: 'src/styles.css', dest: 'esm' },
+        { src: 'src/styles.css', dest: 'lib' },
+      ],
+    }),
   ]
 }
 
